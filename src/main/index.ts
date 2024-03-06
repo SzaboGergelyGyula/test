@@ -3,19 +3,61 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { Database } from 'sqlite3'
-import './handlers/userHandlers'
 
-const dbFilePath = join(app.getPath('userData'), 'mydatabase.db')
+import './handlers/tableHandlers'
+import './handlers/orderHandlers'
+import './handlers/resourceHandlers'
+import './handlers/orderResourceHandlers'
+import './handlers/dayHandlers'
+import './handlers/categoriesHandlers'
+
+const dbFilePath = join(app.getPath('appData'), 'vendeglatas.db')
 
 export const db = new Database(dbFilePath)
 
+db.run(`PRAGMA foreign_keys = ON;`)
 db.run(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY,
-    name TEXT,
-    email TEXT
-  )
-`)
+CREATE TABLE IF NOT EXISTS tables (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  name TEXT NOT NULL
+);`)
+db.run(`
+CREATE TABLE IF NOT EXISTS orders (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  table_id INTEGER NOT NULL,
+  discount_value INTEGER CHECK (discount_value >= 0 AND discount_value <= 100),
+  payed DATE,
+  FOREIGN KEY (table_id) REFERENCES "tables"(id) ON DELETE CASCADE
+);`)
+db.run(`
+CREATE TABLE IF NOT EXISTS categories (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  category_name TEXT NOT NULL
+);`)
+db.run(`
+CREATE TABLE IF NOT EXISTS resource (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  category_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  price INTEGER NOT NULL,
+  amount INTEGER,
+  FOREIGN KEY (category_id) REFERENCES "categories"(id)
+);`)
+db.run(`
+CREATE TABLE IF NOT EXISTS order_resource (
+  order_id INTEGER NOT NULL,
+  resource_id INTEGER NOT NULL,
+  amount INTEGER,
+  FOREIGN KEY (order_id) REFERENCES "orders"(id),
+  FOREIGN KEY (resource_id) REFERENCES "resource"(id)
+);`)
+db.run(`
+CREATE TABLE IF NOT EXISTS days (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  open DATE NOT NULL,
+  close DATE,
+  summary INTEGER
+);`)
 
 function createWindow(): void {
   // Create the browser window.
@@ -26,8 +68,9 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      preload: join(__dirname, '../preload/index.ts'),
+      sandbox: false,
+      contextIsolation: true
     }
   })
 

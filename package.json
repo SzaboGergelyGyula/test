@@ -1,19 +1,20 @@
 {
-  "name": "react-ts-test",
-  "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "name": "vendeglatas",
+  "version": "1.0.1",
+  "description": "Vendéglátásra készített applikáció.",
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://www.electronjs.org",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
-    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
-    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck:node": "tsc --noEmit --skipLibCheck -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit --skipLibCheck -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
+    "electron-vite": "electron-vite",
     "postinstall": "electron-builder install-app-deps",
     "build:win": "npm run build && electron-builder --win --config",
     "build:mac": "electron-vite build && electron-builder --mac --config",
@@ -22,9 +23,11 @@
   "dependencies": {
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
     "electron-updater": "^5.3.0",
     "react-router-dom": "^6.22.1",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -50,5 +53,12 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.2"
+  },
+  "build": {
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    }
   }
 }
