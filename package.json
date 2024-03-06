@@ -1,6 +1,6 @@
 {
   "name": "vendeglatas",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Vendéglátásra készített applikáció.",
   "main": "./out/main/index.js",
   "author": "example.com",
@@ -8,8 +8,8 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
-    "typecheck:node": "tsc --noEmit --skipLibCheck -p tsconfig.node.json --composite false",
-    "typecheck:web": "tsc --noEmit --skipLibCheck -p tsconfig.web.json --composite false",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
@@ -24,7 +24,10 @@
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^1.0.2",
     "class-variance-authority": "^0.7.0",
+    "electron-react-devtools": "^0.5.3",
+    "electron-toolkit": "^1.0.24",
     "electron-updater": "^5.3.0",
+    "react-devtools": "^5.0.0",
     "react-router-dom": "^6.22.1",
     "sqlite3": "^5.1.6",
     "tailwind-merge": "^2.2.1"
@@ -39,9 +42,9 @@
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.14",
-    "electron": "^24.6.2",
+    "electron": "^24.8.8",
     "electron-builder": "^24.6.3",
-    "electron-vite": "^1.0.25",
+    "electron-vite": "^2.1.0",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -56,9 +59,7 @@
   },
   "build": {
     "win": {
-      "target": [
-        "nsis"
-      ]
+      "target": "nsis"
     }
   }
 }

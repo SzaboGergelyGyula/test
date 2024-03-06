@@ -1,6 +1,6 @@
 import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { electronApp, optimizer, is } from '@electron-toolkit/utils/dist'
 import icon from '../../resources/icon.png?asset'
 import { Database } from 'sqlite3'
 
@@ -68,7 +68,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.ts'),
+      preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true
     }

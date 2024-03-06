@@ -63,31 +63,31 @@ const categoryApi = {
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('tableApi', tableApi)
-    contextBridge.exposeInMainWorld('orderApi', orderApi)
-    contextBridge.exposeInMainWorld('resourceApi', resourceApi)
-    contextBridge.exposeInMainWorld('orderResourceApi', orderResourceApi)
-    contextBridge.exposeInMainWorld('dayApi', dayApi)
-    contextBridge.exposeInMainWorld('categoryApi', categoryApi)
-  } catch (error) {
-    console.error(error)
-  }
-} else {
-  // @ts-ignore (define in dts)
-  window.electron = electronAPI
-  // @ts-ignore (define in dts)
-  window.tableApi = tableApi
-  // @ts-ignore (define in dts)
-  window.orderApi = orderApi
-  // @ts-ignore (define in dts)
-  window.resourceApi = resourceApi
-  // @ts-ignore (define in dts)
-  window.orderResourceApi = orderResourceApi
-  // @ts-ignore (define in dts)
-  window.dayApi = dayApi
-  // @ts-ignore (define in dts)
-  window.categoryApi = categoryApi
-}
+// if (process.contextIsolated) {
+//   try {
+contextBridge.exposeInMainWorld('electron', electronAPI)
+contextBridge.exposeInMainWorld('tableApi', tableApi)
+contextBridge.exposeInMainWorld('orderApi', orderApi)
+contextBridge.exposeInMainWorld('resourceApi', resourceApi)
+contextBridge.exposeInMainWorld('orderResourceApi', orderResourceApi)
+contextBridge.exposeInMainWorld('dayApi', dayApi)
+contextBridge.exposeInMainWorld('categoryApi', categoryApi)
+// } catch (error) {
+//   console.error(error)
+// }
+// } else {
+//   // @ts-ignore (define in dts)
+//   window.electron = electronAPI
+//   // @ts-ignore (define in dts)
+//   window.tableApi = tableApi
+//   // @ts-ignore (define in dts)
+//   window.orderApi = orderApi
+//   // @ts-ignore (define in dts)
+//   window.resourceApi = resourceApi
+//   // @ts-ignore (define in dts)
+//   window.orderResourceApi = orderResourceApi
+//   // @ts-ignore (define in dts)
+//   window.dayApi = dayApi
+//   // @ts-ignore (define in dts)
+//   window.categoryApi = categoryApi
+// }
