@@ -36,7 +36,7 @@ export default function CategoryManagement(): JSX.Element {
           <input
             type="text"
             placeholder="Name"
-            value={categoryName}
+            defaultValue={categoryName}
             onChange={(e: ChangeEvent<HTMLInputElement>): void => setCategoryName(e.target.value)}
             className="border-2 rounded-full h-10 px-3"
           />

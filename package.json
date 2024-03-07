@@ -1,6 +1,6 @@
 {
   "name": "vendeglatas",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Vendéglátásra készített applikáció.",
   "main": "./out/main/index.js",
   "author": "example.com",

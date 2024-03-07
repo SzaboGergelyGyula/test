@@ -2,21 +2,25 @@ import { useGlobalContext } from '../hooks/useGlobalContext'
 import { IOrder, IOrderResource, IResource } from '../interfaces/interfaces'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Button from './atoms/Button'
-import { useLocation, useNavigate } from 'react-router-dom'
 import Counter from './atoms/Counter'
 
 type SideListProps = {
   selectedTable: number | undefined
   setSelectedTable: Dispatch<SetStateAction<number | undefined>>
+  selecteRoute: string
+  setSelectedRoute: Dispatch<SetStateAction<string>>
 }
 
-export default function SideList({ selectedTable, setSelectedTable }: SideListProps): JSX.Element {
-  const { orderResources, orders, resources, fetchResources, fetchOrders } = useGlobalContext()
+export default function SideList({
+  selectedTable,
+  setSelectedTable,
+  selecteRoute,
+  setSelectedRoute
+}: SideListProps): JSX.Element {
+  const { orderResources, orders, resources, tables, fetchResources, fetchOrders } =
+    useGlobalContext()
   const [filteredOrderResources, setFilteredOrderResources] = useState<IOrderResource[]>([])
   const [discount, setDiscount] = useState<number>(0)
-
-  const navigate = useNavigate()
-  const location = useLocation()
 
   useEffect(() => {
     const filtered = orderResources.filter(
@@ -67,7 +71,7 @@ export default function SideList({ selectedTable, setSelectedTable }: SideListPr
     fetchOrders()
     fetchResources()
     setSelectedTable(undefined)
-    navigate('/')
+    setSelectedRoute('mainpage')
   }
 
   const summaryOfResources = (): number => {
@@ -86,16 +90,20 @@ export default function SideList({ selectedTable, setSelectedTable }: SideListPr
     if (resource) return resource
     return undefined
   }
+  const findTable = (tableId): string | undefined => {
+    if (tables) return tables.find((table) => table.id === tableId)?.name
+    else return undefined
+  }
 
   return (
     <>
       <div className="mr-5">
         <div className="mb-10">
-          {location.pathname !== '/:tableId/table' ? (
+          {selecteRoute !== 'ordering' ? (
             <Button
               variant={'peurple'}
               disabled={selectedTable ? false : true}
-              onClick={(): void => navigate('/:tableId/table')}
+              onClick={(): void => setSelectedRoute('ordering')}
             >
               Szerkeszt
             </Button>
@@ -104,7 +112,13 @@ export default function SideList({ selectedTable, setSelectedTable }: SideListPr
             Fizet
           </Button>
         </div>
-        <div>{selectedTable ? null : <div>Nincs kijelölt asztal</div>}</div>
+        <div>
+          {selectedTable ? (
+            <h1 className="text-center text-3xl">{findTable(selectedTable)}</h1>
+          ) : (
+            <h1 className="text-center text-3xl">Nincs kijelölt asztal</h1>
+          )}
+        </div>
         {selectedTable ? (
           <>
             <div className="pb-10">

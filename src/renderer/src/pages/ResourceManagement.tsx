@@ -4,37 +4,39 @@ import { ChangeEvent, useState } from 'react'
 
 export default function ResourceManagement(): JSX.Element {
   const [name, setName] = useState<string>('')
-  const [price, setPrice] = useState<number>()
-  const [amount, setAmount] = useState<number>()
+  const [price, setPrice] = useState<number>(0)
+  const [amount, setAmount] = useState<number>(0)
   const [categoryId, setCategoryId] = useState<number | undefined>(undefined)
 
   const [newName, setNewName] = useState('')
-  const [newPrice, setNewPrice] = useState<number>()
-  const [newAmount, setNewAmount] = useState<number>()
+  const [newPrice, setNewPrice] = useState<number>(0)
+  const [newAmount, setNewAmount] = useState<number>(0)
   const [newCategoryId, setNewCategoryId] = useState<number | undefined>(undefined)
   const [updateId, setUpdateId] = useState<number | undefined>(undefined)
 
   const { resources, fetchResources, categories } = useGlobalContext()
 
   const createResource = async (): Promise<void> => {
-    if (price && categoryId)
+    if (price !== undefined && categoryId !== undefined) {
       await window.resourceApi.createResource(name, categoryId, price, amount)
-    setName('')
-    setCategoryId(undefined)
-    setPrice(undefined)
-    setAmount(0)
-    fetchResources()
+      setName('')
+      setCategoryId(undefined)
+      setPrice(0)
+      setAmount(0)
+      fetchResources()
+    }
   }
 
   const updateResource = async (id: number): Promise<void> => {
-    if (newCategoryId && newPrice && newAmount)
+    if (newCategoryId !== undefined && newPrice !== undefined && newAmount !== undefined) {
       await window.resourceApi.updateResource(id, newName, newCategoryId, newPrice, newAmount)
-    setUpdateId(undefined)
-    setNewName('')
-    setNewCategoryId(undefined)
-    setNewPrice(undefined)
-    setNewAmount(0)
-    fetchResources()
+      setUpdateId(undefined)
+      setNewName('')
+      setNewCategoryId(undefined)
+      setNewPrice(0)
+      setNewAmount(0)
+      fetchResources()
+    }
   }
 
   const deleteResource = async (id: number): Promise<void> => {
@@ -58,7 +60,7 @@ export default function ResourceManagement(): JSX.Element {
           <input
             type="number"
             placeholder="Ár"
-            value={price !== undefined ? price : ''}
+            value={price}
             onChange={(e: ChangeEvent<HTMLInputElement>): void =>
               setPrice(parseInt(e.target.value))
             }
@@ -67,7 +69,7 @@ export default function ResourceManagement(): JSX.Element {
           <input
             type="number"
             placeholder="Mennyiség"
-            value={amount !== undefined ? amount : ''}
+            value={amount}
             onChange={(e: ChangeEvent<HTMLInputElement>): void =>
               setAmount(parseInt(e.target.value))
             }
@@ -164,7 +166,7 @@ export default function ResourceManagement(): JSX.Element {
                       <input
                         type="number"
                         placeholder="Ár"
-                        value={newPrice !== undefined ? newPrice : ''}
+                        value={newPrice}
                         onChange={(e: ChangeEvent<HTMLInputElement>): void =>
                           setNewPrice(parseInt(e.target.value))
                         }
@@ -175,7 +177,7 @@ export default function ResourceManagement(): JSX.Element {
                       <input
                         type="number"
                         placeholder="Mennyiség"
-                        value={newAmount !== undefined ? newAmount : ''}
+                        value={newAmount}
                         onChange={(e: ChangeEvent<HTMLInputElement>): void =>
                           setNewAmount(parseInt(e.target.value))
                         }
@@ -188,7 +190,7 @@ export default function ResourceManagement(): JSX.Element {
                           setNewCategoryId(parseInt(e.target.value))
                         }
                         defaultValue="none"
-                        className="border-2 rounded-full h-10 px-3 m-2 "
+                        className="border-2 rounded-full h-10 px-3 m-2"
                       >
                         <option value="none" disabled>
                           Válassz kategóriát!

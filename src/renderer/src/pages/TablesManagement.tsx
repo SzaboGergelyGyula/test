@@ -36,7 +36,7 @@ export default function TablesManagement(): JSX.Element {
           <input
             type="text"
             placeholder="Asztal neve"
-            value={tableName}
+            defaultValue={tableName}
             onChange={(e: ChangeEvent<HTMLInputElement>): void => setTableName(e.target.value)}
             className="border-2 rounded-full h-10 px-3"
           />

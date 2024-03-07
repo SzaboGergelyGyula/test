@@ -1,30 +1,69 @@
-import { Link, useLocation } from 'react-router-dom'
 import Button from './atoms/Button'
+import { Dispatch, SetStateAction } from 'react'
 
-export default function NavBar(): JSX.Element {
-  const location = useLocation()
+type NavBarPropType = {
+  selectedTable: number | undefined
+  selectedRoute: string
+  setSelectedRoute: Dispatch<SetStateAction<string>>
+  setSelectedTable: Dispatch<SetStateAction<number | undefined>>
+}
 
+export default function NavBar({
+  selectedRoute,
+  setSelectedRoute,
+  setSelectedTable
+}: NavBarPropType): JSX.Element {
   return (
     <>
-      {location.pathname === '/' || location.pathname === '/:tableId/' ? (
+      {selectedRoute === 'mainpage' ? (
         <>
-          <Link to={'/resourceManagement'}>
-            <Button variant={'blue'}>Leltár</Button>
-          </Link>
-          <Link to={'/tablesManagement'}>
-            <Button variant={'blue'}>Asztalok kezelése</Button>
-          </Link>
-          <Link to={'/categoryManagement'}>
-            <Button variant={'blue'}>Kategóriák kezelése</Button>
-          </Link>
-          <Link to={'/dayManagement'}>
-            <Button variant={'blue'}>Napok</Button>
-          </Link>
+          <Button
+            variant={'blue'}
+            onClick={(): void => {
+              setSelectedRoute('resourceManagement')
+              setSelectedTable(undefined)
+            }}
+          >
+            Leltár
+          </Button>
+          <Button
+            variant={'blue'}
+            onClick={(): void => {
+              setSelectedRoute('tableManagement')
+              setSelectedTable(undefined)
+            }}
+          >
+            Asztalok kezelése
+          </Button>
+          <Button
+            variant={'blue'}
+            onClick={(): void => {
+              setSelectedRoute('categoryManagement')
+              setSelectedTable(undefined)
+            }}
+          >
+            Kategóriák kezelése
+          </Button>
+          <Button
+            variant={'blue'}
+            onClick={(): void => {
+              setSelectedRoute('dayManagement')
+              setSelectedTable(undefined)
+            }}
+          >
+            Napok
+          </Button>
         </>
       ) : (
-        <Link to={'/'}>
-          <Button variant={'blue'}>Vissza</Button>
-        </Link>
+        <Button
+          variant={'blue'}
+          onClick={(): void => {
+            setSelectedRoute('mainpage')
+            setSelectedTable(undefined)
+          }}
+        >
+          Vissza
+        </Button>
       )}
     </>
   )

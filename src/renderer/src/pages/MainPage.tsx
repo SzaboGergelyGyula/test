@@ -1,38 +1,50 @@
 import Button from '../components/atoms/Button'
 import { useGlobalContext } from '../hooks/useGlobalContext'
-import { IDay } from '../interfaces/interfaces'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 type MainPageProps = {
   setSelectedTable: Dispatch<SetStateAction<number | undefined>>
+  setSelectedRoute: Dispatch<SetStateAction<string>>
 }
 
-export default function MainPage({ setSelectedTable }: MainPageProps): JSX.Element {
-  const [disabled, setDisabled] = useState<boolean>(false)
+export default function MainPage({
+  setSelectedTable,
+  setSelectedRoute
+}: MainPageProps): JSX.Element {
+  const [daysLoaded, setDaysLoaded] = useState<boolean>(false)
+  const [hasOpenedDay, setHasOpenedDay] = useState<boolean>(false)
   const { tables, days } = useGlobalContext()
-  const navigate = useNavigate()
 
   useEffect(() => {
-    const findOpenedDay = (): IDay | undefined => {
-      return days.find((day) => day.open && !day.close)
-    }
-    if (!findOpenedDay()) setDisabled(true)
+    findOpenedDay()
   }, [])
+
+  useEffect(() => {
+    if (daysLoaded) {
+      const openedDay = days.find((day) => day.open && !day.close)
+      setHasOpenedDay(!!openedDay)
+    }
+  }, [daysLoaded, days])
+
+  const findOpenedDay = async (): Promise<void> => {
+    const openedDay = days.find((day) => day.open && !day.close)
+    setHasOpenedDay(!!openedDay)
+    setDaysLoaded(true)
+  }
 
   return (
     <>
-      <div className="flex flex-wrap m-10 ">
+      <div className="flex flex-wrap m-10">
         <ul className="flex flex-wrap">
           {tables.map((table) => (
             <li key={table.id}>
               <Button
                 onClick={(): void => {
-                  navigate('/:tableId/')
+                  console.log(table.id)
                   setSelectedTable(table.id)
                 }}
-                onDoubleClick={(): void => navigate('/:tableId/table')}
-                disabled={disabled}
+                onDoubleClick={(): void => setSelectedRoute('ordering')}
+                disabled={!hasOpenedDay}
                 size={'rectangle'}
               >
                 {table.name}

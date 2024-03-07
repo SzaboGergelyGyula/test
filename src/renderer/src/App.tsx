@@ -1,4 +1,3 @@
-import { Route, Routes, useLocation } from 'react-router-dom'
 import { GlobalContextProvider } from './hooks/useGlobalContext'
 import MainPage from './pages/MainPage'
 import NavBar from './components/NavBar'
@@ -8,43 +7,63 @@ import ResourceManagement from './pages/ResourceManagement'
 import TablesManagement from './pages/TablesManagement'
 import CategoryManagement from './pages/CategoryManagement'
 import DayManagement from './pages/DayManagement'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App(): JSX.Element {
   const [selectedTable, setSelectedTable] = useState<number | undefined>(undefined)
+  const [selectedRoute, setSelectedRoute] = useState('mainpage')
 
-  const location = useLocation()
+  useEffect(() => {
+    console.log('selectedRoute: ' + selectedRoute)
+    console.log('selectedTable: ' + selectedTable)
+  }, [])
 
   return (
     <>
       <GlobalContextProvider>
+        <NavBar
+          selectedRoute={selectedRoute}
+          selectedTable={selectedTable}
+          setSelectedRoute={setSelectedRoute}
+          setSelectedTable={setSelectedTable}
+        />
         <div className="w-full">
           <div className="flex">
             <div className="w-3/4">
-              <NavBar />
-              <Routes>
-                <Route path="/" element={<MainPage setSelectedTable={setSelectedTable} />} />
-                <Route
-                  path="/:tableId"
-                  element={<MainPage setSelectedTable={setSelectedTable} />}
-                />
-                <Route
-                  path="/:tableId/table"
-                  element={<Ordering selectedTable={selectedTable} />}
-                />
-                <Route path="/resourceManagement" element={<ResourceManagement />} />
-                <Route path="/tablesManagement" element={<TablesManagement />} />
-                <Route path="/categoryManagement" element={<CategoryManagement />} />
-                <Route path="/dayManagement" element={<DayManagement />} />
-              </Routes>
+              {((): JSX.Element => {
+                switch (selectedRoute) {
+                  case 'resourceManagement':
+                    return <ResourceManagement />
+                  case 'tableManagement':
+                    return <TablesManagement />
+                  case 'categoryManagement':
+                    return <CategoryManagement />
+                  case 'dayManagement':
+                    return <DayManagement />
+                  case 'mainpage':
+                    return (
+                      <MainPage
+                        setSelectedTable={setSelectedTable}
+                        setSelectedRoute={setSelectedRoute}
+                      />
+                    )
+                  case 'ordering':
+                    return <Ordering selectedTable={selectedTable} />
+                  default:
+                    return <></>
+                }
+              })()}
             </div>
-            {location.pathname === '/' ||
-            location.pathname === '/:tableId/' ||
-            location.pathname === '/:tableId/table' ? (
-              <div className="w-1/4">
-                <SideList selectedTable={selectedTable} setSelectedTable={setSelectedTable} />
-              </div>
-            ) : null}
+            <div className="w-1/4">
+              {selectedTable || selectedRoute === 'mainpage' ? (
+                <SideList
+                  selectedTable={selectedTable}
+                  setSelectedTable={setSelectedTable}
+                  selecteRoute={selectedRoute}
+                  setSelectedRoute={setSelectedRoute}
+                />
+              ) : null}
+            </div>
           </div>
         </div>
       </GlobalContextProvider>
